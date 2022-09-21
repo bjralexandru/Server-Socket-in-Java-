@@ -1,4 +1,4 @@
-package core;
+package bjr.Server.httpServer.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerListenerThread  extends  Thread{
+    // Our class extend the Java built-in class "Thread"
     private final static Logger LOGGER = LoggerFactory.getLogger(ServerListenerThread.class);
 
     // This class needs a constructor which will take the Port
@@ -15,19 +16,21 @@ public class ServerListenerThread  extends  Thread{
     private int port;
     private String webroot;
     private ServerSocket serverSocket;
+    // In order to Listen-and-Serve we also need a socket.
 
     public ServerListenerThread(int port, String webroot) throws IOException {
         this.port = port;
         this.webroot = webroot;
         this.serverSocket = new ServerSocket(this.port );
+        // And the socket needs a port to listen to.
     }
 
     @Override
     public void run() {
         try {
-
             // Without the following while loop, our server would accept only 1 connection
             while (serverSocket.isBound() && !serverSocket.isClosed()) {
+
                 // serverSocket as it is now will append every connection to a queue
                 // which in the event of 1 connection taking too long, the others would
                 // be stuck in the queue.
@@ -42,6 +45,9 @@ public class ServerListenerThread  extends  Thread{
 
                 // Let's see when a connection is accepted
                 LOGGER.info(" * Connection accepted: " + socket.getInetAddress());
+
+                // Everytime a connection gets to our socket, it accepts the connection and
+                // passes it to this workerThread which on his side starts a separate thread
 
                 HTTPConnectionWorkerThread workerThread = new HTTPConnectionWorkerThread(socket);
                 workerThread.start();

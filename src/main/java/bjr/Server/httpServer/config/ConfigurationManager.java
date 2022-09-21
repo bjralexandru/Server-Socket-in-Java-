@@ -1,6 +1,6 @@
-package bjr.Driver.config;
+package bjr.Server.httpServer.config;
 
-import bjr.Driver.util.JSON;
+import bjr.Server.httpServer.util.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -56,12 +56,18 @@ public class ConfigurationManager {
         try {
             fileReader = new FileReader(filePath);
         } catch (FileNotFoundException e) {
+            // The HTTPConfigException was written afterwards.
+            // Initially it was a simple IOException.
             throw new HttpConfigurationException(e);
         }
         StringBuilder sb = new StringBuilder();
         int i;
+        // So we take a string builder "sb" to store chars
+        // and an int "i" to store the line number
         try {
             while ((i = fileReader.read()) != -1){
+                // So until we reach the last line in the file
+                // pass each char to sb.
                 sb.append((char)i);
             }
         } catch (IOException e) {
@@ -72,13 +78,16 @@ public class ConfigurationManager {
         try {
             conf = JSON.parse(sb.toString());
             // Here we've used the custom toString() method
-            // we've just built
+            // we've just built to put together the chars stored in sb.
         } catch (JsonProcessingException e) {
             throw new HttpConfigurationException("Error parsing the configuration file", e);
         }
 
         try {
             myCurrentConfiguration = JSON.fromJson(conf, Configuration.class);
+            // Take the conf which was assembled into a JSON object
+            // and use its fields to populate the class variables
+            // of our Configuration class which are "port" and "webroot".
         } catch (JsonProcessingException e) {
             throw new HttpConfigurationException("Error parsing the configuration file, internal", e);
         }
@@ -86,7 +95,9 @@ public class ConfigurationManager {
     /*
     *
     * Return the current loaded Configuration
+    *
     * */
+
     public Configuration getCurrentConfiguration() {
         if(myCurrentConfiguration == null){
             // This is an error handling example

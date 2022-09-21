@@ -1,4 +1,4 @@
-package bjr.Driver.config;
+package bjr.Server.httpServer.config;
 
 public class Configuration {
     private int port;

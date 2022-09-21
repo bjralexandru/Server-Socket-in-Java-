@@ -1,8 +1,8 @@
-package bjr.Driver;
+package bjr.Server.httpServer;
 
-import bjr.Driver.config.Configuration;
-import bjr.Driver.config.ConfigurationManager;
-import core.ServerListenerThread;
+import bjr.Server.httpServer.config.Configuration;
+import bjr.Server.httpServer.config.ConfigurationManager;
+import bjr.Server.httpServer.core.ServerListenerThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +37,10 @@ public class HttpDriverClass {
 
 
         try {
-            // This code was originally inside the main class, but we've moved it over to
-            // the ServerListenerThread.
-            // Here we just create an instance of that class which takes its arguments from
-            // the configuration file.
             ServerListenerThread serverListenerThread = new ServerListenerThread(conf.getPort(), conf.getWebroot());
+            // Listen and serve on the specified port and webroot
             serverListenerThread.start();
+            // Start a thread using the ConnectionWorkerThread
         } catch (IOException e) {
             throw new RuntimeException(e);
         } // TODO handle later.

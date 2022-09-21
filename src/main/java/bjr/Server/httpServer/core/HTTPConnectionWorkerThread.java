@@ -1,4 +1,4 @@
-package core;
+package bjr.Server.httpServer.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +34,9 @@ public class HTTPConnectionWorkerThread extends Thread {
             // This is how we return the response to the request
 
 
-            // TODO we would do the writing
-            // We build the page to send to the browser
+            // To implement the HTTP Protocols for Messaging Syntax and Routing (RFC 7230)
+            // and Semantics and Content (RFC 7231) HTTP/1.1 we isolated a single request
+            // and wrote it to Request.txt.
 
             String html = "<html><head><title>Simple Java HTTP Server </title><body><h1>This page was served using my Simple Java HTTP Server.</h1></body></head></html>";
 
@@ -47,7 +48,7 @@ public class HTTPConnectionWorkerThread extends Thread {
                             "Content-Length: " + html.getBytes().length + CRLF + // HEADER
                             CRLF +
                             html +
-                            CRLF + CRLF;
+                            CRLF + CRLF; // CRLF = Carriage Return Line Feed
             outputStream.write(response.getBytes());
 
 
