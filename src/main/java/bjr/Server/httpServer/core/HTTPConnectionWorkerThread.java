@@ -2,19 +2,17 @@ package bjr.Server.httpServer.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 public class HTTPConnectionWorkerThread extends Thread {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(HTTPConnectionWorkerThread.class);
-
     // This class will address the issue of handling each
     // connection independent to the others in the socket queue.
-    private Socket socket;
+    private final static Logger LOGGER = LoggerFactory.getLogger(HTTPConnectionWorkerThread.class);
+
+    private final Socket socket;
 
     public HTTPConnectionWorkerThread(Socket socket) {
         this.socket = socket;
@@ -42,7 +40,7 @@ public class HTTPConnectionWorkerThread extends Thread {
 
             // Tell the server how to use this html String
             // Also this is part of the HTTP-protocol which we'll cover in the next part of the project
-            final String CRLF = "\n\r"; // 13, 10 ASCII
+            final String CRLF = "\r\n"; // 13, 10 ASCII
             String response =
                     "HTTP/1.1 200 OK" + CRLF + // Status Line : HTTP_VERSION RESPONSE_CODE RESPONSE_MESSAGE
                             "Content-Length: " + html.getBytes().length + CRLF + // HEADER
@@ -63,6 +61,7 @@ public class HTTPConnectionWorkerThread extends Thread {
                     inputStream.close();
                 } catch (IOException e) { // Disregard and close.
                 }
+
 
                 if (outputStream != null) {
                     try {
